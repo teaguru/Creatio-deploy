@@ -6,38 +6,44 @@ import pyodbc
 import time
 import psycopg2
 import sys
+
+
 # ARCHIVE UNPACKING MODULE
 
 
 def inputpath():
-    print('Enter path to the zip:')
-    zippath = input()
-    print(zippath)
-    print(os.path.isfile(zippath))
-    return(zippath)
+    flag = False
+    while flag == False:
+        print('Enter path to the zip:')
+        zippath = input()
+        print(zippath)
+        flag = os.path.isfile(zippath)
+        print(flag)
+    return (zippath)
 
 
 def inputexportpath():
-    print('Input export path')
-    export_path = input()
-    if os.path.exists(export_path):
-        print(export_path)
-        return(export_path)
-    else:
-        print('directory not exist, make it?(y/n)')
-        answ = input()
-        if (answ == 'y'):
-            try:
-                os.makedirs(export_path)
-            except Exception as e:
-                print('Got Exception', type(e), e.args, type(e.args))
-                print("Создать директорию %s не удалось" % export_path)
-            else:
-                print("Успешно создана директория %s" % export_path)
-                return(export_path)
+    flag = False
+    while flag == False:
+        print('Input export path')
+        export_path = input()
+        if os.path.exists(export_path):
+            print(export_path)
+            return (export_path)
         else:
-            print('ERROR')
-            sys.exit()
+            print('directory not exist, make it?(y/n)')
+            answ = input()
+            if (answ == 'y'):
+                try:
+                    os.makedirs(export_path)
+                except Exception as e:
+                    print('Got Exception', type(e), e.args, type(e.args))
+                    print("Создать директорию %s не удалось" % export_path)
+                else:
+                    print("Успешно создана директория %s , подождите пожалуйста. Идет распаковка..." % export_path)
+                    return (export_path)
+            else:
+                print('Input proper path')
 
 
 def export(zippath, exp_path):
@@ -48,8 +54,7 @@ def export(zippath, exp_path):
     except Exception as e:
         print('Got Exception', type(e), e.args, type(e.args))
     else:
-        print("sucessfull %s" % exp_path)
-
+        print("sucessfull unpackage to %s" % exp_path)
 
 
 def read_connection(exp_path):
@@ -78,31 +83,35 @@ def input_redis():
 def input_subd():
     print('select database postgres[1] or mssql [2]')
     # here we make default names for database server, change it for your company
-    defserv1 = "***"
-    defserv2 = "***"
-    defserv3 = "116.202.197.***"
+    defserv1 = "###"
+    defserv2 = "###"
+    defserv3 = "###"
     flag_subd = False
     while flag_subd == False:
         db_name = input()
         if int(db_name) == 1:
             print("Postgres")
-            print("write postgres server adress, enter ip adress or server name. Also you can write 1 for the first default server{}".format(defserv3))
+            print(
+                "write postgres server adress, enter ip adress or server name. Also you can write 1 for the first default server {}".format(
+                    defserv3))
             servadr = input()
             if servadr == '1':
                 servadr = defserv3
             print("Ok it will be", servadr)
-            return("Postgres", servadr)
+            return ("Postgres", servadr)
             flag_subd = True
 
         if int(db_name) == 2:
-            print("write server adress, enter ip adress or server name. Also you can write 1 for the first default server{} or 2 for the second default server {}".format(defserv1, defserv2))
+            print(
+                "write server adress, enter ip adress or server name. Also you can write 1 for the first default server {} or 2 for the second default server {}".format(
+                    defserv1, defserv2))
             servadr = input()
             if servadr == '1':
                 servadr = defserv1
             if servadr == '2':
                 servadr = defserv2
             print("Ok it will be", servadr)
-            return("MSSQL", servadr)
+            return ("MSSQL", servadr)
             flag_subd = True
         else:
             print(" choose 1 or 2")
@@ -118,8 +127,8 @@ def input_db(bd):
         print('if you want to make Default connection for MSSQL database type "yes" or "y"')
         defcon = input()
         if (defcon == "yes") or (defcon == "y"):
-            db = {'name': db_name, 'user': 'av*', 'password': '123654**'}
-            return(db)
+            db = {'name': db_name, 'user': '###', 'password': '###'}
+            return (db)
     print('input db user')
     db_user = input()
     print("user is:", db_user)
@@ -127,7 +136,7 @@ def input_db(bd):
     db_psswd = input()
     print('******')
     db = {'name': db_name, 'user': db_user, 'password': db_psswd}
-    return(db)
+    return (db)
 
 
 def read_connection(db, subd, redis_port, exp_path):
@@ -175,7 +184,7 @@ def dumpcheck(exp_path):
             if len(elem[2]) == 1:
                 pathdb = exp_path + '\\db\\' + str(elem[2][0])
                 print(pathdb)
-                return(True, pathdb)
+                return (True, pathdb)
             else:
                 print('not one file in db directory')
     except Exception as e:
@@ -184,15 +193,14 @@ def dumpcheck(exp_path):
 
 def open_dump(db, subd, pathdb):
     pathdb = pathdb[1]
-    db = db
     subd = subd
     server = subd[1]
     database = db['name']
-    username = 'avs'
-    password = '12365***'
+    username = '###
+    password = '123654-qQ'
     try:
         cnxn = pyodbc.connect(('DRIVER={ODBC Driver 17 for SQL Server};SERVER=' +
-                               server+';UID='+username+';PWD=' + password), autocommit=True)
+                               server + ';UID=' + username + ';PWD=' + password), autocommit=True)
         cursor = cnxn.cursor()
     except Exception as e:
         print('Got Exception', type(e), e.args, type(e.args))
@@ -218,25 +226,26 @@ def open_dump(db, subd, pathdb):
         print('Got Exception', type(e), e.args, type(e.args))
     cnxn.close()
 
+
 # postgre database restoring module
 
 
-def conndb():
+def conndb(subd, bd):
     con = psycopg2.connect(
         database="postgres",
-        user="postgres",
-        password="123654***",
-        host="116.202.197.***",
+        user="{}".format(bd['user']),
+        password="{}".format(bd['password']),
+        host="{}".format(subd[1]),
         port="5432"
     )
     print(con)
     con.autocommit = True
-    return(con.cursor())
+    return (con.cursor())
 
 
 def checkdb(con, testname):
     print("Database opened successfully")
-    data = con.execute("select * from pg_database;")
+    data = con.execute("select datname from pg_database;")
     rows = con.fetchall()
     listx = list()
     for elem in rows:
@@ -244,15 +253,14 @@ def checkdb(con, testname):
     print(listx)
     if testname in listx:
         print('Database name exist in the list,already')
-        return(False)
+        return (False)
     print('Name not in the list')
-    return(True)
+    return (True)
 
 
 def createdb(exist, cur, testname):
     if exist == True:
-        sql = "CREATE DATABASE {} WITH OWNER postgres  TEMPLATE template0;".format(
-            testname)
+        sql = "CREATE DATABASE {} WITH OWNER postgres  TEMPLATE template0;".format(testname)
         data = cur.execute(sql)
         if checkdb(cur, testname) == False:
             print("db $s created sucessfull".format(testname))
@@ -268,7 +276,7 @@ def dumpcheck(exp_path):
         if len(elem[2]) == 1:
             pathdb = exp_path + '\\db\\' + str(elem[2][0])
             print(pathdb)
-            return(True, pathdb)
+            return (True, pathdb)
         else:
             print('not one file in db directory')
 
@@ -279,7 +287,7 @@ def dump_open(pathdb, cur, psql_path):
             print("Database {} dump will be restoring into server, type password and wait".format(
                 testname))
             os.system(
-                psql_path + " -h 116.202.197.*** -p 5432  -U postgres -d  {}  {} ".format(testname, pathdb[1]))
+                psql_path + " -h 116.202.197.### -p 5432  -U postgres -d  {}  {} ".format(testname, pathdb[1]))
 
         except Exception as e:
             print('Got Exception', type(e), e.args, type(e.args))
@@ -287,11 +295,9 @@ def dump_open(pathdb, cur, psql_path):
             print('Success')
 
 
-def db_create_postgre(exp_path, psql_path, testname):
-    psql_path = psql_path
-    exp_path = exp_path
-    testname = testname
-    con = conndb()
+def db_create_postgre(exp_path, psql_path, testname, subd, bd):
+    testname = bd['name']
+    con = conndb(subd, bd)
     # checking thant dbname is free
     exist = checkdb(con, testname)
     # creating new empty db
@@ -313,7 +319,7 @@ if __name__ == '__main__':
     read_connection(bd, subd, redis_port, exp_path)
     print(subd[0])
     if subd[0] == 'Postgres':
-        db_create_postgre(exp_path, psql_path, testname)
+        db_create_postgre(exp_path, psql_path, testname, subd, bd)
         print('oky')
     else:
         pathdb = dumpcheck(exp_path)
