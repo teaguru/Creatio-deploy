@@ -1,3 +1,6 @@
+#Applicaton developed by Andrey Vsyakikh teadev@yandex.ru.
+#Read guide in README
+
 import psycopg2
 
 
@@ -5,8 +8,8 @@ def conndb(dbname):
     con = psycopg2.connect(
         database="{}".format(dbname),
         user="postgres2",
-        password="12365000",
-        host="116.202.197.000",
+        password="PASS",
+        host="000.000.000.000",
         port="5432"
     )
     print(con)
