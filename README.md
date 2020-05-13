@@ -20,3 +20,8 @@ SELECT "UserPassword" FROM "SysAdminUnit" WHERE  "Name" = 'Supervisor';
 
 
 crinst.py - утилита для разворота приложений CREATIO из архива для MSSQL и POSTGRESQL. использовать на свой страх и риск;)
+
+
+backup.sh - скрипт бэкапа баз данных всего кластера postgresql, работает по крону
+
+backup.ps1 - скрипт актуализации бэкапов сервера приложений для внутреннего использования
