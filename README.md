@@ -21,6 +21,7 @@ SELECT "UserPassword" FROM "SysAdminUnit" WHERE  "Name" = 'Supervisor';
 
 crinst.py - утилита для разворота приложений CREATIO из архива для MSSQL и POSTGRESQL. использовать на свой страх и риск;)
 
+kafkka_python_creatio - утилита на python для тестовой передачи посылки из APACHE KAFKA в web service creatio.
 
 backup.sh - скрипт бэкапа баз данных всего кластера postgresql, работает по крону
 
