@@ -1,7 +1,4 @@
 #!/bin/sh
-#Export postgres connection parameters
-#source /usr/local/etc/pgsql_funcs.conf
-
 PGHOST=localhost
 PGPORT=5432
 PGROLE=postgres
@@ -40,3 +37,18 @@ done
 
 echo "End execution of backup databases script at `date +${DATEFMT}`+ /\n" #>> ${SERVICELOG}
 echo "${COUNT} of ${TOTALCOUNT} databases backed up  \n" #>> ${SERVICELOG}
+echo "delete old backups at AWS"
+
+aws --endpoint-url=https://storage.yandexcloud.net \
+        s3 rm s3://postgre --recursive
+
+echo "send new bacups to aws"
+
+aws --endpoint-url=https://storage.yandexcloud.net \
+    s3 cp --recursive /home/public/BACKUP/ s3://postgre > test.txt 2>&1
+if grep "error" ./test.txt
+then  /usr/bin/curl -vX POST --data-urlencode 'payload=  {"channel": "backups", "username":  "Admin", "text": "Будь осторожен!! Ошибки при заливки бэкапов в yandex cloud, проверь! :ultra_fast_parrot:"}$
+fi;
+if grep "upload:" ./test.txt
+then  /usr/bin/curl -vX POST --data-urlencode 'payload=  {"channel": "backups", "username":  "Admin", "text": " :party-frog: Бэкапы залиты в облако успешно!"}' 'https://hooks.slack.com/services/TAMFC0K$
+fi
