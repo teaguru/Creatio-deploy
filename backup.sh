@@ -44,11 +44,12 @@ aws --endpoint-url=https://storage.yandexcloud.net \
 
 echo "send new bacups to aws"
 
+# send backuos to AWS yandex cloud, and notifications to slack
 aws --endpoint-url=https://storage.yandexcloud.net \
     s3 cp --recursive /home/public/BACKUP/ s3://postgre > test.txt 2>&1
 if grep "error" ./test.txt
-then  /usr/bin/curl -vX POST --data-urlencode 'payload=  {"channel": "backups", "username":  "Admin", "text": "Будь осторожен!! Ошибки при заливки бэкапов в yandex cloud, проверь! :ultra_fast_parrot:"}$
+then  /usr/bin/curl -vX POST --data-urlencode 'payload=  {"channel": "backups", "username":  "Admin", "text": "Будь осторожен!! Ошибки при заливки бэкапов в yandex cloud, проверь! :ultra_fast_parrot:"}' 'https://hooks.slack.com/services/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t'
 fi;
 if grep "upload:" ./test.txt
-then  /usr/bin/curl -vX POST --data-urlencode 'payload=  {"channel": "backups", "username":  "Admin", "text": " :party-frog: Бэкапы залиты в облако успешно!"}' 'https://hooks.slack.com/services/TAMFC0K$
+then  /usr/bin/curl -vX POST --data-urlencode 'payload=  {"channel": "backups", "username":  "Admin", "text": " :party-frog: Бэкапы залиты в облако успешно!"}' 'https://hooks.slack.com/services/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t'
 fi
